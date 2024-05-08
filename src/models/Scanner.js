@@ -14,6 +14,7 @@ export class Scanner {
     return this.#dir;
   }
 
+  // checks if the directory exist, if not, we can't continue
   setDir(newDir) {
     if (!fs.existsSync(newDir)) {
       throw new Error("directory doesn't exist");
@@ -22,6 +23,7 @@ export class Scanner {
     }
   }
 
+  // search in directory by pattern (could be regex)
   async searchFile(dir = this.#dir, Pattern) {
     try {
       return await glob(`${dir}/${Pattern}`);
@@ -30,6 +32,7 @@ export class Scanner {
     }
   }
 
+  // find the final subfolder
   async getAllProductDirs(dir = this.#dir) {
     return await this.#getAllProductDirsHelper(this.#dir, new Set());
   }

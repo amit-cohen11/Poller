@@ -19,6 +19,7 @@ export class Poller {
     this.#sensorName = newSensorName;
   }
 
+  //  search for all {sensorName}.finished files, that represent the folder is ready to RX
   async getAllFinishedProductDirs() {
     const finishedProductDirs = [];
     const allProductDirs = await this.#scanner.getAllProductDirs();
