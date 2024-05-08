@@ -16,15 +16,18 @@ export class Scanner {
 
   setDir(newDir) {
     if (!fs.existsSync(newDir)) {
-      console.error("directory does not exist");
-      throw new Error();
+      throw new Error("directory doesn't exist");
     } else {
       this.#dir = newDir;
     }
   }
 
   async searchFile(dir = this.#dir, Pattern) {
-    return await glob(`${dir}/${Pattern}`);
+    try {
+      return await glob(`${dir}/${Pattern}`);
+    } catch (error) {
+      throw new Error("Got an error while search file", error.message);
+    }
   }
 
   async getAllProductDirs(dir = this.#dir) {
@@ -47,7 +50,7 @@ export class Scanner {
       }
       return allDirs;
     } catch (error) {
-      console.error(`Error while scan directory: ${error.message}`);
+      throw new Error("Got an error while scan directory", error.message);
     }
   }
 }

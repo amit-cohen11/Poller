@@ -1,2 +1,2 @@
-export const SHARE_PATH = "C:/Users/itay/Desktop/test";
+export const SHARE_PATH = "path/to/the/landing_dir";
 export const RX_URL = "https://RX/api/getFilesDirs";

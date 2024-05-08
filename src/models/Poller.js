@@ -41,7 +41,7 @@ export class Poller {
         headers: { "Content-Type": "application/json" },
       });
     } catch (error) {
-      console.error("error", error);
+      throw new Error("Got an error", error.message);
     }
   }
 }
