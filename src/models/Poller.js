@@ -19,21 +19,41 @@ export class Poller {
     this.#sensorName = newSensorName;
   }
 
+  getClassName() {
+    return this.constructor.name;
+  }
+
   //  search for all {sensorName}.finished files, that represent the folder is ready to RX
   async getAllFinishedProductDirs() {
     const finishedProductDirs = [];
     const allProductDirs = await this.#scanner.getAllProductDirs();
 
     for (const productDir of allProductDirs) {
-      const finishedFile = await this.#scanner.searchFile(
-        productDir,
-        `${this.#sensorName}.finished`
-      );
-      if (finishedFile.length) {
+      if (await this.#isNeededSentToRX(productDir)) {
         finishedProductDirs.push(productDir);
       }
     }
     return finishedProductDirs;
+  }
+
+  async #isNeededSentToRX(productDir) {
+    const isSensorFinished = await this.#scanner.searchFile(
+      productDir,
+      `${this.#sensorName}.finished`
+    );
+    const isPollerFinished = await this.#scanner.searchFile(
+      productDir,
+      `${this.getClassName()}.finished`
+    );
+    return isSensorFinished.length && !isPollerFinished.length;
+  }
+
+  async writeFile(dir, fileName, data = "") {
+    try {
+      this.#scanner.writeFile(dir, fileName, data);
+    } catch (error) {
+      throw new Error("Got an error", error.message);
+    }
   }
 
   async sentProductDirsToRX(Dirs) {

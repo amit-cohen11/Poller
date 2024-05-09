@@ -3,7 +3,7 @@ import { Scanner } from "./src/models/Scanner.js";
 import { Poller } from "./src/models/Poller.js";
 
 console.log("Poller Started");
-const poller = new Poller("peach", SHARE_PATH);
+const poller = new Poller("Peach", SHARE_PATH);
 while (true) {
   console.log("starting get all finished products");
   const finishedProductDirs = await poller.getAllFinishedProductDirs();
@@ -12,6 +12,9 @@ while (true) {
   try {
     await poller.sentProductDirsToRX(finishedProductDirs);
     console.log("sent successfully to RX");
+    for (const dir of finishedProductDirs) {
+      await poller.writeFile(dir, `${poller.getClassName()}.finished`);
+    }
   } catch (error) {
     console.error("send to RX failed", error);
   }

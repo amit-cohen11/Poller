@@ -1,7 +1,7 @@
 import fs from "fs";
 import path from "path";
 import { glob } from "glob";
-import { readdir, stat } from "fs/promises";
+import { readdir, stat, writeFile } from "fs/promises";
 
 export class Scanner {
   #dir = undefined;
@@ -20,6 +20,14 @@ export class Scanner {
       throw new Error("directory doesn't exist");
     } else {
       this.#dir = newDir;
+    }
+  }
+
+  async writeFile(dir, fileName, data = "") {
+    try {
+      await writeFile(`${dir}/${fileName}`, data);
+    } catch (error) {
+      throw new Error("Got an error while write a file", error.message);
     }
   }
 
